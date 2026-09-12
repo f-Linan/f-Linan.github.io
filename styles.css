@@ -1,4 +1,4 @@
-/* 简洁专业的样式（已移除回弹；fade-up 应用于所有卡片；动画时长统一为560ms） */
+/* 简洁专业的样式（已移除回弹；fade-up + blur 应用于所有带 .reveal 的元素；动画时长为 560ms） */
 :root{
   --bg:#f6f7fb;
   --card:#ffffff;
@@ -28,20 +28,34 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe
   .avatar{width:80px;height:80px}
 }
 
-/* 基础 reveal：默认元素向下偏移并透明 */
-.reveal{opacity:0; transform:translateY(18px); transition:opacity 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1); will-change:opacity, transform, filter}
-.reveal.active{opacity:1; transform:translateY(0)}
+/* 基础 reveal：默认元素向下偏移、透明并带模糊 */
+.reveal{
+  opacity:0;
+  transform:translateY(18px);
+  filter:blur(6px); /* 新增：默认模糊 */
+  transition:opacity 560ms cubic-bezier(.2,.9,.2,1),
+             transform 560ms cubic-bezier(.2,.9,.2,1),
+             filter 560ms cubic-bezier(.2,.9,.2,1);
+  will-change:opacity, transform, filter;
+}
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+  filter:blur(0); /* 清除模糊，产生模糊→清晰效果 */
+}
 
 /* fade-up: 由下到上淡入（应用于全部卡片） */
-.reveal--fadeup{ /* 基础规则已覆盖 */ }
+.reveal--fadeup{ /* 使用基础规则 */ }
 
-/* 保留其他 utility 类（scale/slide/blur）但 fade-up 为默认视觉 */
-.reveal--scale{ transform:translateY(8px) scale(.96); transition:opacity 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1)}
-.reveal--scale.active{ transform:translateY(0) scale(1); opacity:1 }
+/* 保留其他 utility 类（scale/slide）以备将来使用 */
+.reveal--scale{ transform:translateY(8px) scale(.96); transition:opacity 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1), filter 560ms cubic-bezier(.2,.9,.2,1)}
+.reveal--scale.active{ transform:translateY(0) scale(1); opacity:1; filter:blur(0) }
 .reveal--slide-fade{ transform:none; transition:opacity 560ms cubic-bezier(.2,.9,.2,1) }
 .reveal--slide-fade.active{ transform:none; opacity:1 }
-.reveal--blur{ filter:blur(6px); transform:translateY(6px); transition:opacity 560ms cubic-bezier(.2,.9,.2,1), filter 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1)}
-.reveal--blur.active{ filter:blur(0); transform:translateY(0); opacity:1 }
+
+/* reveal--blur 可作为显式类保留（现在与 .reveal 行为一致） */
+.reveal--blur{ /* 保留以兼容旧代码 */ }
+.reveal--blur.active{ /* 保持与 .reveal.active 一致 */ }
 
 /* 已完全移除任何 bounce 回弹动画 */
 
@@ -49,6 +63,52 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe
 .projects .project.reveal:nth-child(1){ transition-delay:0s }
 .projects .project.reveal:nth-child(2){ transition-delay:0.06s }
 .projects .project.reveal:nth-child(3){ transition-delay:0.12s }
+
+/* 顶部固定渐变白色覆盖（含 backdrop-filter 模糊） */
+:root{
+  --top-overlay-height: 160px; /* 顶部覆盖层高度，按需调整 */
+  --top-overlay-blur: 8px;     /* 模糊强度，按需调整 */
+}
+body::before{
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--top-overlay-height);
+  pointer-events: none;       /* 不拦截交互 */
+  z-index: 9999;              /* 如需更高或更低，调整此值 */
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,0.95) 20%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  -webkit-backdrop-filter: blur(var(--top-overlay-blur)) saturate(120%);
+  backdrop-filter: blur(var(--top-overlay-blur)) saturate(120%);
+}
+
+/* 回退：浏览器不支持 backdrop-filter 时仍显示渐变色（但不模糊） */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  body::before{
+    background: linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.95) 0%,
+      rgba(255,255,255,0.8) 30%,
+      rgba(255,255,255,0.45) 60%,
+      rgba(255,255,255,0) 100%
+    );
+  }
+}
+
+/* 无障碍 / 低性能设备：尊重减少动效设置或窄屏设备，禁用模糊以减少开销 */
+@media (prefers-reduced-motion: reduce), (max-width:720px){
+  body::before{
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
 
 /* prefers-reduced-motion: 关闭动画，直接显示内容 */
 @media (prefers-reduced-motion: reduce){
