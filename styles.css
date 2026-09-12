@@ -114,3 +114,13 @@ body::before{
 @media (prefers-reduced-motion: reduce){
   .reveal, .reveal.active { transition: none !important; animation: none !important; transform: none !important; opacity: 1 !important; filter: none !important }
 }
+
+/* 使 site-header 在视觉上更像卡片，但保持在 overlay 之下以被模糊 */
+.site-header.card{
+  background: var(--card);
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(17,24,39,0.04);
+  border-bottom: none; /* 去掉原有的底部线 */
+  margin-top: 12px; /* 与页面其余卡片保持一致的间距 */
+}
