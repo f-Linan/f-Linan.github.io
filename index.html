@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header reveal">
+  <header class="site-header reveal reveal--fadeup">
     <div class="container">
       <img class="avatar" src="assets/avatar.svg" alt="f-linan 头像">
       <div class="intro">
@@ -20,27 +20,27 @@
   </header>
 
   <main class="container">
-    <section id="about" class="card reveal">
+    <section id="about" class="card reveal reveal--slide-fade">
       <h2>关于我</h2>
       <p>你好，我是 f-linan。这是一个由模板生成的个人主页示例。你可以在仓库中编辑 <code>index.html</code> 和 <code>styles.css</code> 来替换为你自己的内容，包括个人简介、头像、简历和项目。</p>
     </section>
 
-    <section id="projects" class="card reveal">
+    <section id="projects" class="card reveal reveal--scale">
       <h2>项目</h2>
       <div class="projects">
-        <article class="project reveal">
+        <article class="project reveal reveal--bounce">
           <h3>项目示例 1</h3>
           <p>简短描述：这是第一个示例项目的占位说明，展示项目标题、简介与链接。</p>
           <p><a href="#">查看详情</a></p>
         </article>
 
-        <article class="project reveal">
+        <article class="project reveal reveal--bounce">
           <h3>项目示例 2</h3>
           <p>简短描述：第二个示例项目占位，你可以把真实的仓库链接或演示地址放在这里。</p>
           <p><a href="#">查看详情</a></p>
         </article>
 
-        <article class="project reveal">
+        <article class="project reveal reveal--bounce">
           <h3>项目示例 3</h3>
           <p>简短描述：第三个示例项目占位。</p>
           <p><a href="#">查看详情</a></p>
@@ -48,7 +48,7 @@
       </div>
     </section>
 
-    <section id="contact" class="card reveal">
+    <section id="contact" class="card reveal reveal--blur">
       <h2>联系方式</h2>
       <ul class="contact-list">
         <li>GitHub: <a href="https://github.com/f-linan" target="_blank" rel="noopener">github.com/f-linan</a></li>
@@ -58,7 +58,7 @@
     </section>
   </main>
 
-  <footer class="site-footer reveal">
+  <footer class="site-footer reveal reveal--fadeup">
     <div class="container">
       <p>© <span id="year"></span> f-linan — 由 GitHub Pages 托管</p>
     </div>
@@ -67,7 +67,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Scroll reveal: elements fade in and move up when they enter the viewport
+    // Scroll reveal: elements animate when they enter the viewport
     (function(){
       var reveals = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window) {
