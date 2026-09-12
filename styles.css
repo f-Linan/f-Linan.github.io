@@ -1,4 +1,4 @@
-/* 简洁专业的样式（含多种滚动显现动画） */
+/* 简洁专业的样式（已移除回弹；fade-up 应用于所有卡片；动画时长统一为360ms） */
 :root{
   --bg:#f6f7fb;
   --card:#ffffff;
@@ -29,35 +29,23 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe
 }
 
 /* 基础 reveal：默认元素向下偏移并透明 */
-.reveal{opacity:0; transform:translateY(18px); transition:opacity 520ms cubic-bezier(.2,.9,.2,1), transform 520ms cubic-bezier(.2,.9,.2,1); will-change:opacity, transform, filter}
+.reveal{opacity:0; transform:translateY(18px); transition:opacity 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1); will-change:opacity, transform, filter}
 .reveal.active{opacity:1; transform:translateY(0)}
 
-/* fade-up (保留原效果) */
-.reveal--fadeup{ /* 使用基础规则即可 */ }
+/* fade-up: 由下到上淡入（应用于全部卡片） */
+.reveal--fadeup{ /* 基础规则已覆盖 */ }
 
-/* scale: 由小到大并淡入 */
-.reveal--scale{ transform:translateY(8px) scale(.96); transition:opacity 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1)}
+/* 保留其他 utility 类（scale/slide/blur）但 fade-up 为默认视觉 */
+.reveal--scale{ transform:translateY(8px) scale(.96); transition:opacity 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1)}
 .reveal--scale.active{ transform:translateY(0) scale(1); opacity:1 }
-
-/* slide-fade: 已关闭滑入，仅保留淡入（避免位移） */
-.reveal--slide-fade{ transform:none; transition:opacity 520ms cubic-bezier(.2,.9,.2,1) }
+.reveal--slide-fade{ transform:none; transition:opacity 360ms cubic-bezier(.2,.9,.2,1) }
 .reveal--slide-fade.active{ transform:none; opacity:1 }
-
-/* blur: 由模糊到清晰并淡入 */
-.reveal--blur{ filter:blur(6px); transform:translateY(6px); transition:opacity 560ms cubic-bezier(.2,.9,.2,1), filter 560ms cubic-bezier(.2,.9,.2,1), transform 560ms cubic-bezier(.2,.9,.2,1)}
+.reveal--blur{ filter:blur(6px); transform:translateY(6px); transition:opacity 360ms cubic-bezier(.2,.9,.2,1), filter 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1)}
 .reveal--blur.active{ filter:blur(0); transform:translateY(0); opacity:1 }
 
-/* bounce: 带回弹效果（overshoot），回弹强度调整为 -6px */
-.reveal--bounce{ transform:translateY(24px); opacity:0 }
-.reveal--bounce.active{ animation:reveal-bounce 640ms cubic-bezier(.2,.9,.2,1) both }
-@keyframes reveal-bounce{
-  0%{ transform:translateY(24px); opacity:0 }
-  60%{ transform:translateY(-6px); opacity:1 }
-  80%{ transform:translateY(4px) }
-  100%{ transform:translateY(0) }
-}
+/* 已完全移除任何 bounce 回弹动画 */
 
-/* stagger 支持：如果一组元素需要延迟，可以在 HTML 中按顺序使用 inline style transition-delay，或使用 nth-child in CSS for small sets */
+/* stagger: small per-item delay for projects */
 .projects .project.reveal:nth-child(1){ transition-delay:0s }
 .projects .project.reveal:nth-child(2){ transition-delay:0.06s }
 .projects .project.reveal:nth-child(3){ transition-delay:0.12s }
